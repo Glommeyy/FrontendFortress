@@ -45,7 +45,11 @@ $stmt = $pdo->query("SELECT quests.id, quests.title, quests.short_description, q
 // Fetch quest slots
 $slots = [];
 try {
-    $stmt = $pdo->prepare("SELECT slot_number, quest_title, status FROM quest_slots WHERE user_id = ? ORDER BY slot_number ASC");
+    $stmt = $pdo->prepare("SELECT qs.slot_number, qs.quest_title, qs.status, q.id AS quest_id 
+                           FROM quest_slots qs
+                           LEFT JOIN quests q ON qs.quest_title = q.title
+                           WHERE qs.user_id = ? 
+                           ORDER BY qs.slot_number ASC");
     $stmt->execute([$user_id]);
     $slots = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
@@ -112,23 +116,25 @@ try {
 
 
         <div class="body-container">
-            <div class="leftside-container">
-                <div class="left-title">PENDING TASKS</div>
-                <?php foreach ($slots as $slot): ?>
-                <div class="task-cont" id="task-cont">
-                    <!-- 1st slot open -->
-                    <div class="slot-1"><img src="" alt="">
-                        <?php if ($slot['status'] === 'available' && empty($slot['quest_title'])): ?>
-                            <span class="text-success"></span>
-                        <?php elseif ($slot['status'] === 'occupied'): ?>
-                            <h3><?php echo htmlspecialchars($slot['quest_title']); ?></h3>
-                        <?php else: ?>
-                            <span class="text-danger"><img src="pic/Lock.png" alt=""></span>
-                        <?php endif; ?>
-                    </div>
+    <div class="leftside-container">
+        <div class="left-title">PENDING TASKS</div>
+        <?php foreach ($slots as $slot): ?>
+            <div class="task-cont" id="task-cont">
+                <div class="slot-1">
+                    <img src="" alt="">
+                    <?php if ($slot['status'] === 'available' && empty($slot['quest_title'])): ?>
+                        <span class="text-success"></span>
+                    <?php elseif ($slot['status'] === 'occupied' && !empty($slot['quest_id'])): ?>
+                        <a href="quest_details.php?id=<?= urlencode($slot['quest_id']) ?>" style="text-decoration: none; color: inherit;">
+                            <h3><?= htmlspecialchars($slot['quest_title']) ?></h3>
+                        </a>
+                    <?php else: ?>
+                        <span class="text-danger"><img src="pic/Lock.png" alt=""></span>
+                    <?php endif; ?>
                 </div>
-                <?php endforeach; ?>
             </div>
+        <?php endforeach; ?>
+    </div>
 
             <div class="middle-container">
                 <div class="holder">
@@ -165,8 +171,8 @@ try {
             <div class="rightside-container">
                 <div class="btns">
                     <div class="btn">
-                        <img src="pic/inbox.png" alt="">
-                        <span>INBOX</span>
+                        <a href="view_answers.php"><img src="pic/inbox.png" alt=""></a>
+                        <a style="text-decoration: none;" href="view_answers.php"><span>INBOX</span></a>
                     </div>
                     <div class="btn">
                         <a href="shop.php"><img src="pic/shopping cart.png" alt=""></a>

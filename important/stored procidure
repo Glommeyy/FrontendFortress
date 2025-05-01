@@ -1,0 +1,41 @@
+DELIMITER $$
+
+CREATE PROCEDURE update_user_exp_and_level(
+    IN p_user_id INT,
+    IN p_exp_gain INT
+)
+BEGIN
+    DECLARE current_exp INT;
+    DECLARE current_level INT;
+    DECLARE exp_threshold INT;
+
+    -- Get current exp and level of the user
+    SELECT exp, level INTO current_exp, current_level
+    FROM user_profiles
+    WHERE user_id = p_user_id;
+
+    -- If user exists, update experience and check if they level up
+    IF current_exp IS NOT NULL THEN
+        -- Update experience
+        SET current_exp = current_exp + p_exp_gain;
+
+        -- Level-up logic (you can modify the logic here based on your game system)
+        SET exp_threshold = current_level * 100; -- Example threshold: 100 exp per level
+
+        -- Check if user has enough exp to level up
+        IF current_exp >= exp_threshold THEN
+            SET current_level = current_level + 1; -- Increase level
+            SET current_exp = current_exp - exp_threshold; -- Subtract exp for the next level
+        END IF;
+
+        -- Update user profile with the new exp and level
+        UPDATE user_profiles
+        SET exp = current_exp, level = current_level
+        WHERE user_id = p_user_id;
+
+        -- Optionally: Add logic for other updates like reward coins or gold
+        -- You can also implement other conditions based on quest difficulty
+    END IF;
+END $$
+
+DELIMITER ;
