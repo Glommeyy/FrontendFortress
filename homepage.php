@@ -88,8 +88,8 @@ try {
                     <span class="ign"><?php echo htmlspecialchars($user['name']); ?></span>
                     <span class="lvl">LVL <?php echo $user['level']; ?></span>
                 </div>
-                <div class="expbar">
-                    <span><img src="pic/progbar.png" alt=""></span>
+                <div class="expbar" style="width: 200px; height: 30px; background-color: #A5A5A5; border-radius: 32px; overflow: hidden; margin-left: 10px;">
+                    <div style="border-radius: 32px; height: 100%; width: <?php echo min(100, ($user['exp'] % 100)); ?>%;  background: linear-gradient(90deg, #000000 0%, #210D26 25%, #291D2C 50%, #632673 75%, #84319B 100%); border: 1px solid #FFFFFF;"></div>
                 </div>
             </div>
             <img src="pic/title.png" alt="" class="brand">
@@ -171,8 +171,8 @@ try {
             <div class="rightside-container">
                 <div class="btns">
                     <div class="btn">
-                        <a href="view_answers.php"><img src="pic/inbox.png" alt=""></a>
-                        <a style="text-decoration: none;" href="view_answers.php"><span>INBOX</span></a>
+                        <a href="inbox.php"><img src="pic/inbox.png" alt=""></a>
+                        <a style="text-decoration: none;" href="inbox.php"><span class="logout-txt">INBOX</span></a>
                     </div>
                     <div class="btn">
                         <a href="shop.php"><img src="pic/shopping cart.png" alt=""></a>

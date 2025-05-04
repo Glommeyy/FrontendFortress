@@ -64,8 +64,8 @@ try {
       style="width: 803px; height: 335px; top: -50px" />
     <div class="rightnav">
       <div class="home" onclick="backHome()">
-      <a style="text-decoration: none;" href="dashboard.php"><img src="pic/home 1.png" alt="" class="home-icon" /></a>
-        <a style="text-decoration: none;" href="dashboard.php"><span id="home-text">HOME</span></a>
+      <a style="text-decoration: none;" href="homepage.php"><img src="pic/home 1.png" alt="" class="home-icon" /></a>
+        <a style="text-decoration: none;" href="homepage.php"><span id="home-text">HOME</span></a>
       </div>
       <div class="logout" onclick="   ">
         <img src="pic/Exit.png" alt="" class="logout-icon" />
